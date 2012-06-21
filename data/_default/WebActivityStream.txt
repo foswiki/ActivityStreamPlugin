@@ -1,0 +1,7 @@
+%META:TOPICINFO{author="ProjectContributor" comment="reprev" date="1340288078" format="1.1" reprev="21" version="21"}%
+%INCLUDE{"%SYSTEMWEB%.WebActivityStream"}%
+
+<!--
+   * Set CACHEABLE = on
+   * Set CACHEEXPIRE = +5min
+-->

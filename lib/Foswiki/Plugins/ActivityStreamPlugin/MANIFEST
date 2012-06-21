@@ -1,0 +1,13 @@
+data/_default/WebActivityStream.txt 0644
+data/System/ActivityStreamPlugin.txt 0644
+data/System/SiteActivityStream.txt 0644
+data/System/WebActivityStream.txt 0644
+lib/Foswiki/Logger/ActivityLogger.pm 0644
+lib/Foswiki/Plugins/ActivityStreamPlugin/Config.spec 0644
+lib/Foswiki/Plugins/ActivityStreamPlugin/Core.pm 0644
+lib/Foswiki/Plugins/ActivityStreamPlugin.pm 0644
+pub/System/ActivityStreamPlugin/activity.css 0644
+pub/System/ActivityStreamPlugin/activity.css.gz 0644
+pub/System/ActivityStreamPlugin/activity.uncompressed.css 0644
+pub/System/ActivityStreamPlugin/Makefile 0644
+templates/activitystream.tmpl 0644

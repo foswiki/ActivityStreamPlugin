@@ -1,0 +1,331 @@
+%{ default format for an activity. more specific formats are defined below }%
+%TMPL:DEF{"activity::format"}%<div class='activity $action'> 
+  %JQICON{"%IF{"'%icon%'=~'^(%.*)?$'" then="page_white" else="%icon%"}%"}%
+  $wikiusername $actioned 
+  %TMPL:P{"activity::webtopiclink"}%
+  %TMPL:P{"activity::date"}%
+  (verb = $action)
+</div>%TMPL:END%
+%TMPL:DEF{"activity::view_format"}%%TMPL:P{"activity::format" icon="eye"}%%TMPL:END%
+
+%TMPL:DEF{"activity::multi_format"}%<div class='activity $action'> 
+  %JQICON{"%IF{"'%icon%'=~'^(%.*)?$'" then="page_white" else="%icon%"}%"}%
+  $wikiusername $actioned $countobjects
+  %TMPL:P{"activity::webtopiclink"}%
+  %TMPL:P{"activity::date"}%
+  $subformat
+  (multi)
+</div>%TMPL:END%
+
+%{ edit actions }%
+%TMPL:DEF{"activity::edit_format"}%<div class='activity $action'> 
+  %JQICON{"pencil"}% $wikiusername edited
+  %TMPL:P{"activity::webtopiclink"}%
+  %TMPL:P{"activity::date"}%
+</div>%TMPL:END%
+
+%TMPL:DEF{"activity::multi_edit_format"}%<div class='activity $action'>
+  %JQICON{"pencil"}% $wikiusername edited $countobjects topics
+  %TMPL:P{"activity::date"}%
+  <div class='activityDetails foswikiGrayText'>
+    $subformat(, )
+  </div>
+</div>%TMPL:END%
+
+%TMPL:DEF{"activity::multi_edit_subformat"}%%TMPL:P{"activity::webtopiclink"}%%TMPL:END%
+
+%{ upload }%
+%TMPL:DEF{"activity::upload_format"}%<div class='activity $action'>
+  %MIMEICON{"$filename" size="16"}% $wikiusername uploaded
+  %TMPL:P{"activity::attachmentlink"}%
+  to 
+  %TMPL:P{"activity::webtopiclink"}%
+  %TMPL:P{"activity::date"}%
+  %TMPL:P{"activity::filedetails"}%
+</div>%TMPL:END%
+%TMPL:DEF{"activity::attach"}%%TMPL:P{"activity::upload"}%%TMPL:END%
+
+%TMPL:DEF{"activity::multi_upload_format"}%<div class='activity $action'>
+  %MIMEICON{"$filename" size="16"}% $wikiusername uploaded
+  $countobjects files to 
+  %TMPL:P{"activity::webtopiclink"}%
+  %TMPL:P{"activity::date"}%
+  ... $percntTWISTYBUTTON{id="activity_twisty_$index" showlink="%MAKETEXT{"show details"}%" hidelink="%MAKETEXT{"hide details"}%" mode="span"}$percnt
+  $percntTWISTYTOGGLE{id="activity_twisty_$index"}$percnt
+  <div class='activityDetails foswikiGrayText %TMPL:P{"activity::lightbox::parameter"}%'>
+    $subformat( )
+    %CLEAR%
+  </div>
+  $percntENDTWISTYTOGGLE$percnt
+  $percntTMPL:P{\"activity::lightbox::javascript\"}$percnt
+</div>%TMPL:END%
+
+%TMPL:DEF{"activity::multi_upload_subformat"}%%IF{"'$filename'=~'\.(jpe?g|gif|png|bmp)$'" 
+  then="$dollarpercntTMPL:P{\"activity::thumbnail\" web=\"$web\" topic=\"$topic\" filename=\"$filename\" size=\"48\"}$dollarpercnt" 
+  else="<a href='%PUBURLPATH%/$web/$topic/$filename' title='$filename' class='foswikiLeft'>%MIMEICON{"$filename" size="48"}%</a>"
+}%</a>%TMPL:END%
+
+%{ moveattachment }%
+%TMPL:DEF{"activity::moveattachment_format"}%<div class='activity $action'>
+  %MIMEICON{"$filename" size="16"}% $wikiusername moved
+  attachment 
+  %TMPL:P{"activity::attachmentlink" web="$targetweb" topic="$targettopic"}%
+  from 
+  %TMPL:P{"activity::webtopiclink"}%
+  to
+  %TMPL:P{"activity::webtopiclink" web="$targetweb" topic="$targettopic"}%
+  %TMPL:P{"activity::date"}%
+  %TMPL:P{"activity::filedetails" filename="$targetfilename"}%
+</div>%TMPL:END%
+
+%TMPL:DEF{"activity::multi_moveattachment_format"}%<div class='activity $action'>
+  %MIMEICON{"$filename" size="16"}% $wikiusername moved
+  $countobjects attachments 
+  from
+  %TMPL:P{"activity::webtopiclink"}%
+  to
+  %TMPL:P{"activity::webtopiclink" web="$targetweb" topic="$targettopic"}%
+  %TMPL:P{"activity::date"}%
+  ... $percntTWISTYBUTTON{id="activity_twisty_$index" showlink="%MAKETEXT{"show details"}%" hidelink="%MAKETEXT{"hide details"}%" mode="span"}$percnt
+  $percntTWISTYTOGGLE{id="activity_twisty_$index"}$percnt
+  <div class='activityDetails foswikiGrayText %TMPL:P{"activity::lightbox::parameter"}%'>
+    $subformat( )
+    %CLEAR%
+  </div>
+  $percntENDTWISTYTOGGLE$percnt
+  $percntTMPL:P{\"activity::lightbox::javascript\"}$percnt
+%TMPL:END%
+%TMPL:DEF{"activity::multi_moveattachment_subformat"}%%IF{"'$filename'=~'\.(jpe?g|gif|png|bmp)$'" 
+  then="$dollarpercntTMPL:P{\"activity::thumbnail\" web=\"$web\" topic=\"$topic\" filename=\"$filename\" size=\"48\"}$dollarpercnt" 
+  else="<a href='%PUBURLPATH%/$web/$topic/$filename' title='$filename' class='foswikiLeft'>%MIMEICON{"$filename" size="48"}%</a>"
+}%</a>%TMPL:END%
+
+
+%{ --- }%
+
+%TMPL:DEF{"activity::comment"}%<div class='activity $action'>
+  %JQICON{"%IF{"'%icon%'!=''" then="comment" else="%icon%"}%"}%
+  $wikiusername commented on 
+  %TMPL:P{"activity::webtopiclink"}%
+  %TMPL:P{"activity::date"}%
+  ... $percntTWISTYBUTTON{id="activity_twisty_$index" showlink="%MAKETEXT{"show details"}%" hidelink="%MAKETEXT{"hide details"}%" mode="span"}$percnt
+  $percntTWISTYTOGGLE{id="activity_twisty_$index"}$percnt
+    <div class='activityDetails foswikiGrayText actionCommentDetails'> $message&nbsp;... </div>
+  $percntENDTWISTYTOGGLE$percnt
+</div>%TMPL:END%
+%TMPL:DEF{"activity::commentupdate"}%%TMPL:P{"activity::comment" icon="comment_edit"}%%TMPL:END%
+%TMPL:DEF{"activity::commentapprove"}%%TMPL:P{"activity::comment" icon="comment_add"}%%TMPL:END%
+
+%TMPL:DEF{"activity::commentdelete"}%<div class='activity $action'>
+  %JQICON{"comment_delete"}% $wikiusername deleted a comment at 
+  %TMPL:P{"activity::webtopiclink"}%
+  %TMPL:P{"activity::date"}%
+</div>%TMPL:END%
+
+%TMPL:DEF{"activity::new"}%<div class='activity $action'>
+  %JQICON{"add"}% $wikiusername created
+  %TMPL:P{"activity::webtopiclink"}%
+  %TMPL:P{"activity::date"}%
+</div>%TMPL:END%
+
+%TMPL:DEF{"activity::copy"}%<div class='activity $action'>
+  %JQICON{"application_double"}% $wikiusername copied <nop>$web.$topic to [[$targetweb.$targettopic][$targettopic]] %TMPL:P{"activity::date"}%
+</div>%TMPL:END%
+
+%TMPL:DEF{"activity::delete"}%<div class='activity $action'>
+  %JQICON{"bin"}% $wikiusername deleted topic <nop>$topic from web [[$web.%HOMETOPIC%][$web]] 
+  %TMPL:P{"activity::date"}%
+</div>%TMPL:END%
+
+%TMPL:DEF{"activity::deleteattachment"}%<div class='activity $action'>
+  %JQICON{"bin"}% $wikiusername deleted attachment $filename from topic 
+  %TMPL:P{"activity::webtopiclink"}%
+  %TMPL:P{"activity::date"}%
+</div>%TMPL:END%
+
+%TMPL:DEF{"activity::deleteattachment_multi"}%<div class='activity $action'>
+  %JQICON{"bin"}% $wikiusername deleted 
+  $percntFORMATLIST{"$filenames" split="\s*,\s*" header="$dollarcount" format=" " separator=""}$percnt
+  attachments
+  from
+  %TMPL:P{"activity::webtopiclink"}%
+  %TMPL:P{"activity::date"}%
+  ... $percntTWISTYBUTTON{id="activity_twisty_$index" showlink="%MAKETEXT{"show details"}%" hidelink="%MAKETEXT{"hide details"}%" mode="span"}$percnt
+  $percntTWISTYTOGGLE{id="activity_twisty_$index"}$percnt
+  <div class="activityDetails actionMultiDetails %TMPL:P{"activity::lightbox::parameter"}%">
+    $percntFORMATLIST{"$filenames" 
+      split="\s*,\s*"
+      format="<a href='#' onclick='return false' title='$1' class='foswikiLeft'>$dollarpercntMIMEICON{\"$1\" size=\"48\"}$dollarpercnt</a>"
+      separator=" " 
+    }$percnt
+  </div>
+  $percntENDTWISTYTOGGLE$percnt
+  %CLEAR%
+</div>%TMPL:END%
+
+
+%TMPL:DEF{"activity::move"}%<div class='activity $action'>
+  %JQICON{"application_go"}% $wikiusername moved <nop>$web.$topic to [[$targetweb.$targettopic][$targettopic]] %TMPL:P{"activity::date"}%
+</div>%TMPL:END%
+%TMPL:DEF{"activity::rename"}%%TMPL:P{"activity::move"}%%TMPL:END%
+
+%TMPL:DEF{"activity::renameattachment"}%<div class='activity $action'>
+  %MIMEICON{"$filename" size="16"}% $wikiusername renamed
+  attachment <nop>$filename at 
+  %TMPL:P{"activity::webtopiclink"}%
+  to
+  %TMPL:P{"activity::attachmentlink" filename="$targetfilename"}%
+  %TMPL:P{"activity::date"}%
+  %IF{"not '$web.$topic'/attachments[name='$targetfilename']" then="<div style='display:none'>" }%<!-- -->
+  %TMPL:P{"activity::filedetails" filename="$targetfilename"}%
+  %IF{"not '$web.$topic'/attachments[name='$targetfilename']" then="</div>" }%<!-- -->
+</div>%TMPL:END%
+
+%TMPL:DEF{"activity::renameattachment_multi"}%<div class='activity $action'>
+  %MIMEICON{"$filename" size="16"}% $wikiusername renamed
+  $percntFORMATLIST{"$filenames" split="\s*,\s*" header="$dollarcount" format=" " separator=""}$percnt
+  attachment(s) at 
+  %TMPL:P{"activity::webtopiclink"}%
+  %TMPL:P{"activity::date"}%
+</div>%TMPL:END%
+
+
+
+%TMPL:DEF{"activity::register"}%<div class='activity $action'>
+  %JQICON{"user_add"}% $wikiusername signed up to this site %TMPL:P{"activity::date"}%
+</div>%TMPL:END%
+
+%TMPL:DEF{"activity::login"}%<div class='activity $action'>
+  %JQICON{"user"}% $wikiusername logged in %TMPL:P{"activity::date"}%
+</div>%TMPL:END%
+
+%TMPL:DEF{"activity::logout"}%<div class='activity $action'>
+  %JQICON{"key_go"}% $wikiusername logged out %TMPL:P{"activity::date"}%
+</div>%TMPL:END%
+
+%TMPL:DEF{"activity::editattachment"}%<div class='activity $action'>
+  %MIMEICON{"$filename" size="16"}% $wikiusername edited
+  %TMPL:P{"activity::attachmentlink"}%
+  at 
+  %TMPL:P{"activity::webtopiclink"}%
+  %TMPL:P{"activity::date"}%
+  %TMPL:P{"activity::filedetails"}%
+</div>%TMPL:END%
+
+%TMPL:DEF{"activity::editattachment_multi"}%<div class='activity $action'>
+  %MIMEICON{"$filename" size="16"}% $wikiusername edited the properties
+  of $percntFORMATLIST{"$filenames" split="\s*,\s*" header="$dollarcount" format=" " separator=""}$percnt
+  attachments 
+  at 
+  %TMPL:P{"activity::webtopiclink"}%
+  %TMPL:P{"activity::date"}%
+  %TMPL:P{"activity::filesdetails"}%
+</div>%TMPL:END%
+
+%TMPL:DEF{"activity::viewfile"}%<div class='activity $action'>
+  %JQICON{"eye"}% $wikiusername viewed $filename at 
+  %TMPL:P{"activity::webtopiclink"}%
+  %TMPL:P{"activity::date"}%
+</div>%TMPL:END%
+
+%{ render an overfiew for one affected file }%
+%TMPL:DEF{"activity::filedetails"}%<!-- -->
+%IF{"'%IF{ "'%filename%'=~'^(%.*)?$'" then="$filename" else="%filename%"}%'=~'\.(jpe?g|gif|png)$'"
+  then="... $dollarpercntTWISTYBUTTON{id=\"activity_twisty_$index\" showlink=\"%MAKETEXT{"show details"}%\" hidelink=\"%MAKETEXT{"hide details"}%\" mode=\"span\"}$dollarpercnt
+            $dollarpercntTWISTYTOGGLE{id=\"activity_twisty_$index\"}$dollarpercnt"
+  else="<!-- -->"
+}%
+%IF{"'%IF{"'%filename%'=~'^(%.*)?$'" then="$filename" else="%filename%"}%'=~'\.(jpe?g|gif|png)$'"
+  then="<div class=\"activityDetails actionImageDetails %TMPL:P{"activity::lightbox::parameter"}%\">
+    $dollarpercntTMPL:P{
+      \"activity::thumbnail\" 
+      web=\"$web\" 
+      topic=\"$topic\" 
+      filename=\"%IF{ "'%filename%'=~'^(%.*)?$'" then="$filename" else="%filename%"}%\" 
+      size=\"100\"
+    }$dollarpercnt
+    </div>"
+  else="<!-- -->"
+}%
+%IF{"'%IF{"'%filename%'=~'^(%.*)?$'" then="$filename" else="%filename%"}%'=~'\.(jpe?g|gif|png)$'"
+  then="$dollarpercntENDTWISTYTOGGLE$dollarpercnt
+        $percntCLEAR$percnt
+        $percntTMPL:P{\"activity::lightbox::javascript\"}$percnt"
+}%<!-- -->%TMPL:END%
+
+%{ render an overview for all affected files in a multi actions }%
+%TMPL:DEF{"activity::filesdetails"}%<!-- -->
+  ... $percntTWISTYBUTTON{id="activity_twisty_$index" showlink="%MAKETEXT{"show details"}%" hidelink="%MAKETEXT{"hide details"}%" mode="span"}$percnt
+  $percntTWISTYTOGGLE{id="activity_twisty_$index"}$percnt
+  <div class="activityDetails actionMultiDetails %TMPL:P{"activity::lightbox::parameter"}%">
+    $percntFORMATLIST{"$filenames" 
+      split="\s*,\s*"
+      format="$dollarpercntIF{\"'$1'=~'\.(jpe?g|gif|png|bmp)$'\"
+                then=\"$dollardollarpercntTMPL:P{\\"activity::thumbnail\\" web=\\"$web\\" topic=\\"$topic\\" filename=\\"$1\\" size=\\"48\\"}$dollardollarpercnt\"
+                else=\"<a href='%PUBURLPATH%/$web/$topic/$1' title='$1' class='foswikiLeft'>$dollardollarpercntMIMEICON{\\"$1\\" size=\\"48\\" }$dollardollarpercnt</a>\"
+              }$dollarpercnt"
+      separator=" "
+    }$percnt
+  </div>
+  $percntENDTWISTYTOGGLE$percnt
+  %TMPL:P{"activity::lightbox::javascript"}%
+  %CLEAR%
+<!-- -->%TMPL:END%
+
+%{ helper to display dates: if TimeSincePlugin is installed a more human readable version of the time is rendered; otherwise a default time format }%
+%TMPL:DEF{"activity::date"}%%TMPL:P{context="TimeSincePluginEnabled" then="activity::date::timesince" else="activity::date::default"}%%TMPL:END%
+%TMPL:DEF{"activity::date::default"}%at $time%TMPL:END%
+%TMPL:DEF{"activity::date::timesince"}%<dirtyarea>%TIMESINCE{"$time" format="$dollartime ago"}%</dirtyarea>%TMPL:END%
+
+%{ helper to render thumbnails: if ImagePlugin is installed real thumnails are created; otherwise we down size the images cliend side }%
+%TMPL:DEF{"activity::thumbnail"}%%TMPL:P{context="ImagePluginEnabled" then="activity::thumbnail::imageplugin" else="activity::thumbnail::default" web="%web%" topic="%topic%" filename="%filename%" size="%size%"}%%TMPL:END%
+%TMPL:DEF{"activity::thumbnail::imageplugin"}%%IMAGE{"%filename%" class="activityThumbnail" topic="%web%.%topic%" size="%size%" tooltip="on" crop="northwest" align="left" warn="off"}%%TMPL:END%
+%TMPL:DEF{"activity::thumbnail::default"}%<a class='foswikiLeft activityThumbnail' href='%PUBURLPATH%/%web%/%topic%/%filename%' style='width:%size%px; overflow:hidden; margin:0px 5px 5px 0px;'><img src='%PUBURLPATH%/%web%/%topic%/%filename%' height='%size%' /></a>%TMPL:END%
+
+%{ helper to select the right ligthbox backend: use PrettyPhoto if installed; use JQSlimbox as a fallbacl }%
+%TMPL:DEF{"activity::lightbox::parameter"}%%TMPL:P{context="PrettyPhotoEnabled" then="activity::prettyphoto::parameter" else="activity::slimbox::parameter"}%%TMPL:END%
+%TMPL:DEF{"activity::prettyphoto::parameter"}%jqPrettyPhoto {itemSelector:'a.activityThumbnail'}%TMPL:END%
+%TMPL:DEF{"activity::slimbox::parameter"}%jqSlimbox {itemSelector:'a.activityThumbnail'}%TMPL:END%
+
+%TMPL:DEF{"activity::lightbox::javascript"}%%TMPL:P{context="PrettyPhotoEnabled" then="activity::prettyphoto::javascript" else="activity::slimbox::javascript"}%%TMPL:END%
+%TMPL:DEF{"activity::prettyphoto::javascript"}%%JQREQUIRE{"prettyphoto"}%<!-- -->%TMPL:END%
+%TMPL:DEF{"activity::slimbox::javascript"}%%JQREQUIRE{"slimbox"}%<!-- -->%TMPL:END%
+
+%{ helper to cope with non-existing topics }%
+%TMPL:DEF{"activity::webtopiclink"}%%IF{
+  "istopic '%IF{"'%web%'=~'^(%.*)?$'" then="$web" else="%web%"}%.%IF{"'%topic%'=~'^(%.*)?$'" then="$topic" else="%topic%"}%'" 
+  then="[[%IF{"'%web%'=~'^(%.*)?$'" then="$web" else="%web%"}%.%IF{"'%topic%'=~'^(%.*)?$'" then="$topic" else="%topic%"}%][%IF{"'%topic%'=~'^(%.*)?$'" then="$topic" else="%topic%"}%]]" 
+  else="<u>%IF{"'%topic%'=~'^(%.*)?$'" then="$topic" else="%topic%"}%</u>"
+}%%TMPL:END%
+
+%{ helper to cope with links to attachments to non-existing topics }%
+%TMPL:DEF{"activity::attachmentlink"}%%IF{
+  "istopic '%IF{"'%web%'=~'^(%.*)?$'" then="$web" else="%web%"}%.%IF{"'%topic%'=~'^(%.*)?$'" then="$topic" else="%topic%"}%'" 
+  then="<a href='%PUBURLPATH%/%IF{ "'%web%'=~'^(%.*)?$'" 
+    then="$web" 
+    else="%web%"
+  }%/%IF{
+    "'%topic%'=~'^(%.*)?$'" 
+    then="$topic" 
+    else="%topic%"
+  }%/%IF{
+    "'%filename%'=~'^(%.*)?$'" 
+    then="$filename" 
+    else="%filename%"
+  }%'>%IF{ "'%filename%'=~'^(%.*)?$'" then="$filename" else="%filename%" }%</a>"
+  else="<u>%IF{"'%filename%'=~'^(%.*)?$'" then="$filename" else="%filename%"}%</u>"
+}%%TMPL:END%
+
+%{ material to be added to the zones}%
+%TMPL:DEF{"activity::addtozone"}%<!-- -->
+%ADDTOZONE{"head"
+  id="ACTIVITYSTREAMPLUGIN::CSS"
+  text="<link rel='stylesheet' href='%PUBURLPATH%/%SYSTEMWEB%/ActivityStreamPlugin/activity.css' type='text/css' media='all' />"
+}%<!-- -->
+%JQREQUIRE{"shrinkurls, tooltip"}%<!-- -->
+<!-- -->%TMPL:END%
+
+%{ header string to separate days  }%
+%TMPL:DEF{"activity::dayheader"}%<h3 class='activityDayHeader'>
+  $formatTime($date, '$wday, $day. $month $year')
+</h3>%TMPL:END%

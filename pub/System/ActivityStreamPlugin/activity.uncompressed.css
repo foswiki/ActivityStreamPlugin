@@ -1,0 +1,15 @@
+.activity {
+  margin:0.6923em 0em; /* 9px 0px */
+}
+.activityDetails {
+  padding:0.6923em 0px 0.6923em 20px; /* 9px 0px 9px 20px */
+}
+a.activityThumbnail {
+  margin:0px 5px 5px 0px;
+}
+.activityDayHeader {
+  font-size:100%;
+  color:gray;
+  border-bottom:1px solid #ddd;
+  margin-top: 2.25em; /* 36px */
+}

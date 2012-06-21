@@ -1,0 +1,5 @@
+Foswiki::Plugins::MimeIconPlugin,>=1.1,perl,Required.
+Foswiki::Plugins::TimeSincePlugin,>=3.00,perl,Optional.
+Foswiki::Plugins::ImagePlugin,>=2.41,perl,Optional.
+Foswiki::Plugins::FlexPaperPlugin,>=1.1,perl,Optional.
+Foswiki::Contrib::JQPrettyPhotoContrib,>=1.10,perl,Optional.
